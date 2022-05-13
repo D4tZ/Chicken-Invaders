@@ -1,0 +1,5 @@
+﻿  Information.cpp
+C:\Users\thanh\Desktop\My game\Demo\Demo\Information.cpp(30,24): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+C:\Users\thanh\Desktop\My game\Demo\Demo\Information.cpp(92,55): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\thanh\Desktop\My game\Demo\Demo\Information.cpp(102,47): warning C4305: 'argument': truncation from 'double' to 'float'
+  Demo.vcxproj -> C:\Users\thanh\Desktop\My game\Demo\x64\Debug\Demo.exe
