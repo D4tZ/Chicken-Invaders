@@ -30,6 +30,6 @@ Quá trình làm game:
   - Toàn bộ code là tự viết không theo nguồn tham khảo nào.
   - Ảnh, âm thanh trong game lấy trên mạng và được hỗ trợ từ các anh chị khóa trước.
 
-Video demo: https://www.youtube.com/watch?v=fCGqEPtW4Ac
+Video demo: https://www.youtube.com/watch?v=zzi5pvtStPo
 
 Cách trải nghiệm game: mở folder 'File exe' rồi ấn vào file exe là có thể chơi game
