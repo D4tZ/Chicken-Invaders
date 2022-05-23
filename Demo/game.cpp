@@ -8,6 +8,11 @@ void Game::initWindow()
 	this->window->setVerticalSyncEnabled(true);
 }
 
+void Game::initGUI()
+{
+	this->font.loadFromFile("Fonts/font1.ttf");
+}
+
 void Game::initSound()
 {
 	this->soundChickenHit1.openFromFile("Sounds/ChickenHit1.wav");
@@ -15,14 +20,28 @@ void Game::initSound()
 	this->soundChickenHit3.openFromFile("Sounds/ChickenHit3.wav");
 }
 
-//Constructors and Destructors
-Game::Game()
+void Game::initGameLogic()
 {
-	this->initWindow();
+	this->gameStart = false;
+	this->gamePause = false;
+	this->gameWin = false;
+	this->gameLose = false;
+	this->gameEnd = false;
+
+	this->pauseText.setFont(this->font);
+	this->pauseText.setString("Press P to continue!");
+	this->pauseText.setPosition(300, 300);
+	this->pauseText.setCharacterSize(100);
+	this->pauseText.setFillColor(sf::Color::Yellow);
+}
+
+void Game::initGamePlay()
+{
+	this->initGUI();
 	this->initSound();
+	this->initGameLogic();
+
 	this->player = new Player();
-	this->menu = new Menu();
-	this->info = new Information();
 
 	this->bullets = new ManyBullets();
 	this->chickens = new ManyChickens();
@@ -30,13 +49,19 @@ Game::Game()
 	this->bulletPower = new BulletPower();
 	this->boss = new Boss();
 	this->eggBosses = new ManyEggBoss();
-
 	this->board = new PointBoard();
 	this->background = new Background();
 
-	this->gameWin = false;
-	this->gameLose = false;
-	this->gameEnd = false;
+	this->stangdings = new Standings();
+}
+
+//Constructors and Destructors
+Game::Game()
+{
+	this->initWindow();
+	this->menu = new Menu();
+	this->info = new Information();
+	this->initGamePlay();
 }
 
 Game::~Game()
@@ -73,17 +98,36 @@ void Game::run()
 			this->menu->showInformation = this->info->isOpen();
 		}
 
-		if (this->menu->isGameStart())
+		if (this->menu->showStandings) {
+			this->stangdings->open = true;
+			this->stangdings->run(this->window);
+			this->menu->menuClose = this->stangdings->open;
+			this->menu->showStandings = this->stangdings->open;
+		}
+
+		if (this->menu->isGameStart()) {
+			this->board->start();
 			this->runGameplay();
+		}
 	}
+
+
 }
 
 void Game::runGameplay()
 {
-	this->updateGamePlay();
+	this->updateInput();
+	if (this->gamePause == false) {
+		this->updateGamePlay();
+	}
 	this->renderGamePlay();
-	if (this->gameEnd == true && this->gameEndClock.getElapsedTime().asSeconds() > 5.f)
-		this->restartGame();
+	if (this->gameEnd == true) {
+		this->board->endGame();
+		//if(this->gameWin == true)
+			this->stangdings->push(this->board->getTime());
+		if (this->gameEndClock.getElapsedTime().asSeconds() > 5.f)
+			this->restartGame();
+	}
 }
 
 void Game::updatePollEvents()
@@ -95,6 +139,22 @@ void Game::updatePollEvents()
 			this->window->close();
 		if (e.Event::KeyPressed && e.Event::key.code == sf::Keyboard::Escape)
 			this->window->close();
+	}
+}
+
+void Game::updateInput()
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P) && this->pauseClock.getElapsedTime().asSeconds() > 0.5f)
+	{
+		this->pauseClock.restart();
+		if (this->gamePause == true) {
+			this->board->continueGame();
+			this->gamePause = false;
+		}
+		else {
+			this->board->pauseGame();
+			this->gamePause = true;
+		}
 	}
 }
 
@@ -354,37 +414,40 @@ void Game::renderGamePlay()
 		if(this->boss->isDead() == false)
 			this->eggBosses->render(this->window);
 	}
-
 	this->board->render(this->window);
+
+	if (this->gamePause == true)
+		this->window->draw(this->pauseText);
+
 	this->window->display();
 }
 
 void Game::restartGame()
 {
 	delete this->player;
-	this->player = new Player();
 	delete this->bullets;
-	this->bullets = new ManyBullets();
 	delete this->chickens;
-	this->chickens = new ManyChickens();
 	delete this->eggs;
-	this->eggs = new ManyEgg();
 	delete this->bulletPower;
-	this->bulletPower = new BulletPower();
 	delete this->boss;
-	this->boss = new Boss();
 	delete this->eggBosses;
-	this->eggBosses = new ManyEggBoss();
 	delete this->board;
-	this->board = new PointBoard();
 	delete this->background;
-	this->background = new Background();
 	delete this->menu;
+	delete this->stangdings;
+	this->player = new Player();
+	this->bullets = new ManyBullets();
+	this->chickens = new ManyChickens();
+	this->eggs = new ManyEgg();
+	this->bulletPower = new BulletPower();
+	this->boss = new Boss();
+	this->eggBosses = new ManyEggBoss();
+	this->board = new PointBoard();
+	this->background = new Background();
 	this->menu = new Menu();
+	this->stangdings = new Standings();
 
-	this->gameWin = false;
-	this->gameLose = false;
-	this->gameEnd = false;
+	this->initGameLogic();
 }
 
 

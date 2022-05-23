@@ -30,7 +30,7 @@ private:
 	//Insert image power
 	BulletPower bulletPower;
 
-	//Back bottom
+	//Back button
 	sf::Text backText;
 
 	//Sound
@@ -57,8 +57,6 @@ public:
 	void updateMouse(sf::RenderWindow* window);
 	void update(sf::RenderWindow* window);
 	void render(sf::RenderWindow* window);
-
-
 
 };
 

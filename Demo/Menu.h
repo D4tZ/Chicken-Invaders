@@ -20,20 +20,23 @@ public:
 	bool menuClose;
 	bool gameStart;
 	bool showInformation;
+	bool showStandings;
 
 private:
 	//Text and font
+	sf::Font font;
 	float sizeText;
 	sf::Text startText;
 	sf::Text informationText;
+	sf::Text standingsText;
 	sf::Text quitText;
-	sf::Font font;
 
 	//Mouse
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
 
 	void initText();
+	void initText(sf::Text& text);
 public:
 	Menu();
 	virtual ~Menu();
@@ -48,7 +51,7 @@ public:
 	const sf::FloatRect getInformationBounds() const;
 	const sf::FloatRect getQuitBounds() const;
 
-
+	void updateTextIfMouseIn(sf::Text& text);
 	void updateMouse(sf::RenderWindow* window);
 	void updateGUI(sf::RenderWindow* window);
 	void update(sf::RenderWindow* window);

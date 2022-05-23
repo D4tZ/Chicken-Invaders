@@ -10,6 +10,7 @@
 #include "PointBoard.h"
 #include "Boss.h"
 #include "ManyEggBoss.h"
+#include "Standings.h"
 
 class Game
 {
@@ -31,6 +32,7 @@ private:
 	//Menu
 	Menu* menu;
 	Information* info;
+	Standings* stangdings;
 
 	//Board
 	PointBoard* board;
@@ -43,11 +45,16 @@ private:
 	//World background game play
 	Background* background;
 
-	//Game end
+	//Game logic
+	bool gamePause;
+	sf::Clock pauseClock;
+	sf::Text pauseText;
 	bool gameWin = false;
 	bool gameLose = false;
 	bool gameEnd = false;
 	sf::Clock gameEndClock;
+	bool gameStart;
+
 
 	//Sound
 	sf::Music soundChickenHit1;
@@ -57,6 +64,9 @@ private:
 	//Private functions
 	void initWindow();
 	void initSound();
+	void initGameLogic();
+	void initGUI();
+	void initGamePlay();
 
 public:
 	//Constructors and Destructors
@@ -71,6 +81,7 @@ public:
 public:
 	//Game Play
 	void updatePollEvents();
+	void updateInput();
 	void updateInputPlayer();
 
 	//Combat

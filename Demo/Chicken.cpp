@@ -55,6 +55,11 @@ float Chicken::GetHeight()
 	return 75;
 }
 
+float Chicken::getSpeed()
+{
+	return this->speedMovement_x;
+}
+
 //Accessors
 const sf::FloatRect Chicken::getBounds() const
 {
@@ -72,6 +77,14 @@ const float Chicken::getHp() const
 void Chicken::getDamage(float damage)
 {
 	this->hp -= damage;
+}
+
+void Chicken::updateSpeed(float speed)
+{
+	this->speedMovement_x /= this->speedMovement_x;
+	this->speedMovement_x *= speed;
+	this->speedMovement_y /= this->speedMovement_y;
+	this->speedMovement_y *= speed;
 }
 
 void Chicken::updateAnimation()

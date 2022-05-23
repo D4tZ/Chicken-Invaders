@@ -22,8 +22,8 @@ void Boss::initSprite()
 
 void Boss::initMovement()
 {
-	this->speedMovement_x = 6.f;
-	this->speedMovement_y = 6.f;
+	this->speedMovement_x = 3.f;
+	this->speedMovement_y = 3.f;
 	this->upMax = -200;
 	this->downMax = 900;
 	this->leftMax = -117;
@@ -45,6 +45,8 @@ Boss::Boss()
 	this->initBoom();
 	this->dead = false;
 	this->hp = this->HP_MAX;
+
+	this->usedSpeed = false;
 
 	this->boom.openFromFile("Sounds/exp.wav");
 }
@@ -97,6 +99,21 @@ void Boss::setBossDead()
 }
 
 
+void Boss::updateSpeed()
+{
+	if (this->usedSpeed == true)
+		return;
+
+	if (this->hp < this->HP_MAX / 2)
+	{
+		this->usedSpeed = true;
+		this->speedMovement_x /= abs(this->speedMovement_x);
+		this->speedMovement_x *= 6;
+		this->speedMovement_y /= abs(this->speedMovement_y);
+		this->speedMovement_y *= 6;
+	}
+}
+
 void Boss::updateMovement()
 {
 
@@ -140,6 +157,7 @@ void Boss::update()
 	if (this->isDead() == false) {
 		this->updateMovement();
 		this->updateAnimation();
+		this->updateSpeed();
 	}
 }
 

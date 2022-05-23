@@ -36,6 +36,8 @@ private:
 
 	sf::Music boom;
 
+	bool usedSpeed;
+
 	void initSprite();
 	void initMovement();
 	void initBoom();
@@ -53,6 +55,7 @@ public:
 
 	void setBossDead();
 
+	void updateSpeed();
 	void updateMovement();
 	void updateAnimation();
 	void update();

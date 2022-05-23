@@ -39,6 +39,7 @@ public:
 	//Get size sprite
 	float GetWidth();
 	float GetHeight();
+	float getSpeed();
 
 	//Accessors
 	const sf::FloatRect getBounds() const;
@@ -48,13 +49,13 @@ public:
 	//Functions
 	void getDamage(float damage);
 
+	void updateSpeed(float speed);
+
 	void updateAnimation();
 	void updateMovement();
 
 	void update();
 
 	void render(sf::RenderTarget* target);
-
-
 };
 

@@ -14,6 +14,10 @@ private:
 	//Move chickens
 	float speedMovement;
 
+	//Max speed
+	std::vector<float> maxSpeed;
+	std::vector<bool> useSpeed;
+
 	//Private functions
 	void initTexture();
 	void initChickens();
@@ -33,7 +37,7 @@ public:
 	void updateMovement();
 
 	//Combat 
-
+	void updateSpeed();
 	void update();
 	void render(sf::RenderTarget* target);
 

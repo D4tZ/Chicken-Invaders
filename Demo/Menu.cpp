@@ -22,10 +22,16 @@ void Menu::initText()
 	this->quitText.setFillColor(sf::Color::White);
 	this->quitText.setString("QUIT");
 
+	this->standingsText.setFont(this->font);
+	this->standingsText.setCharacterSize(this->sizeText);
+	this->standingsText.setFillColor(sf::Color::White);
+	this->standingsText.setString("STANDINGS");
+
 	//Position text
-	this->startText.setPosition(1600.f / 2 - this->startText.getCharacterSize() * 2.f, 550.f);
-	this->informationText.setPosition(1600.f / 2 - this->startText.getCharacterSize() * 4.f, 650.f);
-	this->quitText.setPosition(1600.f / 2 - this->startText.getCharacterSize() * 1.5f, 750.f);
+	this->startText.setPosition(1600.f / 2 - this->startText.getCharacterSize() * 2.f, 500.f);
+	this->informationText.setPosition(1600.f / 2 - this->informationText.getCharacterSize() * 4.f, 600.f);
+	this->standingsText.setPosition(1600.f / 2 - this->startText.getCharacterSize() * 3.3f, 700.f);
+	this->quitText.setPosition(1600.f / 2 - this->startText.getCharacterSize() * 1.55f, 800.f);
 }
 
 Menu::Menu()
@@ -45,6 +51,7 @@ Menu::Menu()
 	this->menuClose = false;
 	this->gameStart = false;
 	this->showInformation = false;
+	this->showStandings = false;
 
 	this->backgroundMusic.openFromFile("Sounds/start_wav.wav");
 	this->backgroundMusic.setLoop(true);
@@ -104,54 +111,38 @@ const sf::FloatRect Menu::getQuitBounds() const
 
 
 
+
 void Menu::updateMouse(sf::RenderWindow* window)
 {
 	this->mousePosWindow = sf::Mouse::getPosition(*window);
 	this->mousePosView = window->mapPixelToCoords(this->mousePosWindow);
 }
 
+void Menu::updateTextIfMouseIn(sf::Text& text)
+{
+	if (text.getGlobalBounds().contains(this->mousePosView))
+	{
+		if( text.getFillColor() != sf::Color::Red)
+		{
+			this->singleClick.setPlayingOffset(sf::seconds(0.11));
+			this->singleClick.play();
+
+			text.setFillColor(sf::Color::Red);
+		}
+
+	}
+	else
+		text.setFillColor(sf::Color::White);
+}
+
+
 void Menu::updateGUI(sf::RenderWindow* window)
 {
 	//set color if mouse in text
-	if (this->startText.getGlobalBounds().contains(this->mousePosView)) 
-	{
-		if (this->startText.getFillColor() != sf::Color::Red)
-		{
-			this->singleClick.setPlayingOffset(sf::seconds(0.11));
-			this->singleClick.play();
-
-			this->startText.setFillColor(sf::Color::Red);
-		}
-
-	}
-	else 
-		this->startText.setFillColor(sf::Color::White);
-
-	if (this->informationText.getGlobalBounds().contains(this->mousePosView)) 
-	{
-		if (this->informationText.getFillColor() != sf::Color::Red)
-		{
-			this->singleClick.setPlayingOffset(sf::seconds(0.11));
-			this->singleClick.play();
-
-			this->informationText.setFillColor(sf::Color::Red);
-		}
-	}
-	else
-		this->informationText.setFillColor(sf::Color::White);
-
-	if (this->quitText.getGlobalBounds().contains(this->mousePosView)) 
-	{
-		if (this->quitText.getFillColor() != sf::Color::Red)
-		{
-			this->singleClick.setPlayingOffset(sf::seconds(0.11));
-			this->singleClick.play();
-
-			this->quitText.setFillColor(sf::Color::Red);
-		}
-	}
-	else
-		this->quitText.setFillColor(sf::Color::White);
+	this->updateTextIfMouseIn(this->startText);
+	this->updateTextIfMouseIn(this->informationText);
+	this->updateTextIfMouseIn(this->standingsText);
+	this->updateTextIfMouseIn(this->quitText);
 
 	//mouse click text
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->startText.getGlobalBounds().contains(this->mousePosView))
@@ -169,6 +160,15 @@ void Menu::updateGUI(sf::RenderWindow* window)
 		this->click.play();
 
 		this->showInformation = true;
+		this->menuClose = true;
+	}
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->standingsText.getGlobalBounds().contains(this->mousePosView))
+	{
+		this->click.setPlayingOffset(sf::seconds(0.2));
+		this->click.play();
+
+		this->showStandings = true;
 		this->menuClose = true;
 	}
 
@@ -191,6 +191,7 @@ void Menu::renderGUI(sf::RenderWindow* window)
 	window->draw(this->startText);
 	window->draw(this->informationText);
 	window->draw(this->quitText);
+	window->draw(this->standingsText);
 }
 
 
